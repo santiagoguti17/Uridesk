@@ -110,7 +110,7 @@ export function AuthModal({ open, mode, onClose, onSwitchMode }: AuthModalProps)
                     {title}
                   </h2>
                   <p className="max-w-md text-sm leading-7 text-slate-300 sm:text-base">
-                    Accede con el mismo lenguaje visual del dashboard: sobrio, premium y enfocado en productividad jurídica.
+                    Accede a la mejor forma de organizar tu trabajo: sobrio, premium y enfocado en productividad jurídica.
                   </p>
                 </div>
               </div>

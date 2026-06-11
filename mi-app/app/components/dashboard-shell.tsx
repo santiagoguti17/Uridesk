@@ -36,11 +36,9 @@ type DashboardShellProps = {
 
 type ViewKey =
   | "Dashboard"
-  | "Procesos"
-  | "Clientes"
+  | "Expedientes"
   | "Calendario"
-  | "Documentos"
-  | "Honorarios"
+  | "Finanzas"
   | "Reportes"
   | "Configuración";
 
@@ -58,20 +56,17 @@ type ProcessRow = {
 
 const sidebarItems: Array<{ label: ViewKey; icon: typeof LayoutDashboard }> = [
   { label: "Dashboard", icon: LayoutDashboard },
-  { label: "Procesos", icon: FolderKanban },
-  { label: "Clientes", icon: Users },
+  { label: "Expedientes", icon: FolderKanban },
   { label: "Calendario", icon: CalendarDays },
-  { label: "Documentos", icon: FileText },
-  { label: "Honorarios", icon: CircleDollarSign },
   { label: "Reportes", icon: BarChart3 },
   { label: "Configuración", icon: Settings2 },
 ];
 
-const quickMenuItems: ViewKey[] = ["Dashboard", "Procesos", "Calendario", "Honorarios", "Reportes"];
+const quickMenuItems: ViewKey[] = ["Dashboard", "Expedientes", "Calendario", "Finanzas", "Reportes"];
 
 const kpis = [
-  { label: "Procesos activos", value: "128", trend: "+12% vs. mes anterior", icon: FolderKanban, accent: "from-[#0a2536] to-[#33566d]" },
-  { label: "Procesos urgentes", value: "14", trend: "6 vencen hoy", icon: ShieldAlert, accent: "from-[#17384f] to-[#0a2536]" },
+  { label: "Expedientes activos", value: "128", trend: "+12% vs. mes anterior", icon: FolderKanban, accent: "from-[#0a2536] to-[#33566d]" },
+  { label: "Expedientes urgentes", value: "14", trend: "6 vencen hoy", icon: ShieldAlert, accent: "from-[#17384f] to-[#0a2536]" },
   { label: "Próximos remates", value: "9", trend: "3 en 72 horas", icon: Gavel, accent: "from-[#33566d] to-[#5c7890]" },
   { label: "Honorarios pactados", value: "$ 1.84B", trend: "+8.4% acumulado", icon: BriefcaseBusiness, accent: "from-[#102b40] to-[#33566d]" },
   { label: "Total cobrado", value: "$ 920M", trend: "+18% este mes", icon: BadgeCheck, accent: "from-[#18485b] to-[#0a2536]" },

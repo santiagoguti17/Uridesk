@@ -17,7 +17,7 @@ const landingHighlights = [
   {
     title: "Acceso seguro",
     description:
-      "Registrate o inicia sesión con Firebase Auth y entra directo al dashboard.",
+      "Registrate o inicia sesión con Firebase Auth y entra directo al mejor ambiente de trabajo.",
     icon: ShieldCheck,
   },
   {
@@ -151,7 +151,7 @@ export function HomePage() {
             </div>
 
             <p className="mt-4 max-w-md text-sm leading-7 text-slate-500">
-              Accede con tu correo y contraseña. Si ya estás autenticado, Uridesk te lleva directamente al dashboard.
+              Accede con tu correo y contraseña. Si ya estás autenticado, Uridesk te lleva directamente al mejor ambiente de trabajo.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
