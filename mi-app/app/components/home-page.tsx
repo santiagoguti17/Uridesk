@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { ArrowUpRight, CircleDollarSign, FolderKanban, Scale, ShieldCheck, Sparkles } from "lucide-react";
 import { AuthModal, type AuthMode } from "./auth-modal";
-import { auth, firebaseReady } from "@/lib/firebase/client";
+import { auth } from "@/lib/firebase/client";
 import { DashboardShell } from "./dashboard-shell";
 
 const landingHighlights = [
@@ -67,7 +67,6 @@ export function HomePage() {
       <DashboardShell
         user={currentUser}
         onSignOut={handleSignOut}
-        isFirebaseReady={firebaseReady}
       />
     );
   }

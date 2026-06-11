@@ -9,6 +9,8 @@ import {
   Bell,
   CalendarDays,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   CircleDollarSign,
   FolderKanban,
   LayoutDashboard,
@@ -18,8 +20,6 @@ import {
   Scale,
   ShieldAlert,
   TrendingUp,
-  Users,
-  FileText,
   Landmark,
   BarChart3,
   Gavel,
@@ -31,7 +31,6 @@ import {
 type DashboardShellProps = {
   user: User;
   onSignOut: () => void;
-  isFirebaseReady: boolean;
 };
 
 type ViewKey =
@@ -63,6 +62,15 @@ const sidebarItems: Array<{ label: ViewKey; icon: typeof LayoutDashboard }> = [
 ];
 
 const quickMenuItems: ViewKey[] = ["Dashboard", "Expedientes", "Calendario", "Finanzas", "Reportes"];
+
+const sectionIntroByView: Record<ViewKey, string> = {
+  Dashboard: "Estás en el dashboard",
+  Expedientes: "Estás en expedientes",
+  Calendario: "Estás en calendario",
+  Finanzas: "Estás en finanzas",
+  Reportes: "Estás en reportes",
+  "Configuración": "Estás en configuración",
+};
 
 const kpis = [
   { label: "Expedientes activos", value: "128", trend: "+12% vs. mes anterior", icon: FolderKanban, accent: "from-[#0a2536] to-[#33566d]" },
@@ -108,9 +116,10 @@ const priorityClients = [
   { name: "Fondo Capital Legal", note: "Audiencias esta semana", amount: "$ 96M" },
 ];
 
-export function DashboardShell({ user, onSignOut, isFirebaseReady }: DashboardShellProps) {
+export function DashboardShell({ user, onSignOut }: DashboardShellProps) {
   const [activeView, setActiveView] = useState<ViewKey>("Dashboard");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [search, setSearch] = useState("");
 
   const filteredProcesses = useMemo(() => {
@@ -131,16 +140,34 @@ export function DashboardShell({ user, onSignOut, isFirebaseReady }: DashboardSh
   return (
     <div className="min-h-screen bg-[#eef5fb] text-[#0a2536]">
       <div className="flex min-h-screen">
-        <aside className="hidden w-80 shrink-0 border-r border-slate-200/80 bg-white/85 px-5 py-6 shadow-[10px_0_40px_rgba(15,23,42,0.04)] backdrop-blur md:flex md:flex-col">
-          <div className="flex items-center gap-3 rounded-2xl bg-[#f4f8fc] px-4 py-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0a2536] text-white shadow-lg">
+        <aside
+          className={`hidden shrink-0 border-r border-slate-200/80 bg-white/85 py-6 shadow-[10px_0_40px_rgba(15,23,42,0.04)] backdrop-blur md:flex md:flex-col ${
+            isSidebarCollapsed ? "w-24 px-3" : "w-80 px-5"
+          }`}
+        >
+          <div className={`flex items-start gap-3 rounded-2xl bg-[#f4f8fc] ${isSidebarCollapsed ? "px-3 py-3" : "px-4 py-3"}`}>
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#0a2536] text-white shadow-lg">
               <Scale className="h-6 w-6" />
             </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#33566d]">Uridesk CRM</p>
-              <p className="text-sm text-slate-500">Gestión jurídica premium</p>
-            </div>
+            {!isSidebarCollapsed ? (
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#33566d]">Uridesk CRM</p>
+                <p className="text-sm text-slate-500">Gestión jurídica premium</p>
+              </div>
+            ) : null}
           </div>
+
+          <button
+            type="button"
+            onClick={() => setIsSidebarCollapsed((current) => !current)}
+            className={`mt-4 inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white text-[#0a2536] shadow-sm transition hover:bg-slate-50 ${
+              isSidebarCollapsed ? "ml-auto h-10 w-10" : "ml-auto h-10 w-10"
+            }`}
+            aria-label={isSidebarCollapsed ? "Expandir menú lateral" : "Contraer menú lateral"}
+            title={isSidebarCollapsed ? "Expandir menú lateral" : "Contraer menú lateral"}
+          >
+            {isSidebarCollapsed ? <ChevronRight className="h-4.5 w-4.5" /> : <ChevronLeft className="h-4.5 w-4.5" />}
+          </button>
 
           <nav className="mt-8 space-y-1.5">
             {sidebarItems.map((item) => {
@@ -152,28 +179,45 @@ export function DashboardShell({ user, onSignOut, isFirebaseReady }: DashboardSh
                   key={item.label}
                   type="button"
                   onClick={() => setActiveView(item.label)}
-                  className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium transition ${
+                  title={item.label}
+                  className={`flex w-full items-center rounded-2xl py-3 text-left text-sm font-medium transition ${
+                    isSidebarCollapsed ? "justify-center px-2" : "gap-3 px-4"
+                  } ${
                     isActive
                       ? "bg-[#0a2536] text-white shadow-[0_16px_30px_rgba(10,37,54,0.18)]"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
                   <Icon className={`h-4.5 w-4.5 ${isActive ? "text-white" : "text-[#33566d]"}`} />
-                  <span>{item.label}</span>
+                  {!isSidebarCollapsed ? <span>{item.label}</span> : <span className="sr-only">{item.label}</span>}
                 </button>
               );
             })}
           </nav>
 
-          <div className="mt-auto rounded-[1.5rem] border border-slate-200 bg-[#f7fbff] p-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#33566d]">Sesión</p>
-            <p className="mt-2 text-sm font-semibold text-[#0a2536]">{user.email ?? "Usuario autenticado"}</p>
+          <div className={`mt-auto rounded-[1.5rem] border border-slate-200 bg-[#f7fbff] shadow-sm ${isSidebarCollapsed ? "p-3" : "p-4"}`}>
+            {!isSidebarCollapsed ? (
+              <>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#33566d]">Sesión</p>
+                <p className="mt-2 text-sm font-semibold text-[#0a2536]">{user.email ?? "Usuario autenticado"}</p>
+              </>
+            ) : (
+              <div className="flex justify-center">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#0a2536] text-sm font-semibold text-white">
+                  {(user.displayName ?? user.email ?? "U").charAt(0).toUpperCase()}
+                </div>
+              </div>
+            )}
             <button
               type="button"
               onClick={onSignOut}
-              className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-[#0a2536] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#143a53]"
+              className={`mt-4 inline-flex w-full items-center justify-center rounded-full bg-[#0a2536] font-semibold text-white transition hover:bg-[#143a53] ${
+                isSidebarCollapsed ? "h-10 px-0 text-xs" : "px-4 py-2.5 text-sm"
+              }`}
+              aria-label="Cerrar sesión"
+              title="Cerrar sesión"
             >
-              Cerrar sesión
+              {isSidebarCollapsed ? "Salir" : "Cerrar sesión"}
             </button>
           </div>
         </aside>
@@ -216,9 +260,9 @@ export function DashboardShell({ user, onSignOut, isFirebaseReady }: DashboardSh
 
               <div className="flex flex-1 items-center gap-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#33566d]">Dashboard jurídico</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#33566d]">{activeView}</p>
                   <h1 className="text-lg font-semibold sm:text-xl">
-                    Buenos días, {user.displayName?.split(" ")[0] ?? user.email?.split("@")[0] ?? "abogado"}
+                    {sectionIntroByView[activeView]}, {user.displayName?.split(" ")[0] ?? user.email?.split("@")[0] ?? "abogado"}
                   </h1>
                 </div>
 
@@ -518,7 +562,7 @@ function ModuleView({ view, userName }: { view: ViewKey; userName: string }) {
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0a2536] text-white">{iconByView[view]}</div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#33566d]">{view}</p>
-          <h2 className="mt-1 text-2xl font-semibold text-[#0a2536]">{view} en construcción elegante</h2>
+          <h2 className="mt-1 text-2xl font-semibold text-[#0a2536]">Estás en {view}</h2>
         </div>
       </div>
       <p className="mt-4 max-w-2xl text-slate-600">
