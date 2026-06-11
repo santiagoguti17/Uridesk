@@ -168,7 +168,6 @@ export function DashboardShell({ user, onSignOut, isFirebaseReady }: DashboardSh
           <div className="mt-auto rounded-[1.5rem] border border-slate-200 bg-[#f7fbff] p-4 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#33566d]">Sesión</p>
             <p className="mt-2 text-sm font-semibold text-[#0a2536]">{user.email ?? "Usuario autenticado"}</p>
-            <p className="mt-1 text-sm text-slate-500">{isFirebaseReady ? "Firebase activo" : "Firebase no configurado"}</p>
             <button
               type="button"
               onClick={onSignOut}
@@ -506,11 +505,9 @@ function DashboardView({
 function ModuleView({ view, userName }: { view: ViewKey; userName: string }) {
   const iconByView: Record<ViewKey, ReactNode> = {
     Dashboard: <LayoutDashboard className="h-6 w-6" />,
-    Procesos: <FolderKanban className="h-6 w-6" />,
-    Clientes: <Users className="h-6 w-6" />,
+    Expedientes: <FolderKanban className="h-6 w-6" />,
     Calendario: <CalendarDays className="h-6 w-6" />,
-    Documentos: <FileText className="h-6 w-6" />,
-    Honorarios: <CircleDollarSign className="h-6 w-6" />,
+    Finanzas: <CircleDollarSign className="h-6 w-6" />,
     Reportes: <BarChart3 className="h-6 w-6" />,
     "Configuración": <Settings2 className="h-6 w-6" />,
   };
